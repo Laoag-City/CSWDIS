@@ -1,5 +1,20 @@
 ## TO-DO'S
 
+### After Cloning Repo
+1. Make sure PHP Composer, NPM, Gulp, and XAMPP is installed.
+2. Rename .env.example to .env
+3. Run these commands in the project folder:
+    composer install
+    php artisan key:generate
+    npm install
+When prompted for inputs for Fomantic UI after inputting npm install, select Express as the installation mode, Yes when asked of project folder, public/semantic when asked where to place source files, dist/ folder when asked where to place compiled files, and leave the rest in its default selection.
+4. Then cd to public/semantic folder and run this command to compile semantic
+    gulp build
+5. In the .env folder, set your development database values.
+6. then go back to project folder and run this command to create the tables:
+    php artisan migrate
+7. All is set for development.
+
 ### 1. New Client Record Page.
 This page has a form with fields for:
 (Client's Info)
