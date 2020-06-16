@@ -15,4 +15,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function confidential_viewers()
+    {
+    	$this->hasMany('App\ConfidentialViewer', 'user_id', 'user_id');
+    }
 }

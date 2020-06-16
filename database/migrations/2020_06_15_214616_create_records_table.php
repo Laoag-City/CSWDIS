@@ -16,13 +16,13 @@ class CreateRecordsTable extends Migration
         Schema::create('records', function (Blueprint $table) {
             $table->id('record_id');
             $table->foreignId('client_id');
-            $table->foreignId('service_id');
+            $table->foreignId('service_id')->nullable();
             $table->date('date_requested');
             $table->string('problem_presented');
-            $table->string('initial_assessment');
-            $table->string('recommendation');
-            $table->string('action_taken');
-            $table->date('action_taken_date');
+            $table->string('initial_assessment')->nullable();
+            $table->string('recommendation')->nullable();
+            $table->string('action_taken')->nullable();
+            $table->date('action_taken_date')->nullable();
             $table->timestamps();
 
             $table->foreign('client_id')
