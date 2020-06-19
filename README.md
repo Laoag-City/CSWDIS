@@ -18,24 +18,21 @@ When prompted for inputs for Fomantic UI after inputting npm install, select Exp
 ### 1. New Client Record Page.
 This page has a form with fields for:
 (Client's Info)
-1. First Name - text
-2. Middle Name - text
-3. Last Name - text
-4. Name Suffix - dropdown
-5. Phone Number - text
-6. Address - text
-7. Sex - dropdown or radio button
-8. Age - number
-9. Date of Birth - date
+1. Name - text
+2. Phone Number - text
+3. Address - text
+4. Sex - dropdown or radio button
+5. Age - number
+6. Date of Birth - date
 {Client's Record Info}
-10. Service Requested - dropdown
-11. Users Permitted for Access - arrayed checkbox (only showed if chosen service requested is confidential)
-12. Date Requested - date
-13. Problem Presented - textarea
-14. Initial Assessment - textarea
-15. Recommendation - textarea
-16. Action Taken - textarea
-17. Action Taken Date - date
+7. Service Requested - dropdown
+8. Users Permitted for Access - arrayed checkbox (only showed if chosen service requested is confidential)
+9. Date Requested - date
+10. Problem Presented - textarea
+11. Initial Assessment - textarea
+12. Recommendation - textarea
+13. Action Taken - textarea
+14. Action Taken Date - date
 
 Note: For admin users, the service requested field will also contain services that are confidential. When the admin user chooses a confidential service, a table that lists other admin users with a checkbox for each will appear. Tick the checkbox for users who will have access to the record.
 
