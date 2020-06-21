@@ -20,4 +20,9 @@ class User extends Authenticatable
     {
     	$this->hasMany('App\ConfidentialViewer', 'user_id', 'user_id');
     }
+
+    public function client_record_histories()
+    {
+    	$this->hasMany('App\ClientRecordHistory', 'user_id', 'user_id');
+    }
 }

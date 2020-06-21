@@ -25300,6 +25300,13 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+$("body").on("mousemove", function (event) {
+  if (event.pageX == 0) $('.ui.sidebar').sidebar('show');
+});
+$('.message_prompts_close').click(function () {
+  $('.message_prompts').hide();
+});
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

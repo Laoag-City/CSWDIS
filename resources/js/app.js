@@ -26,3 +26,12 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+$("body").on("mousemove",function(event) {
+	if(event.pageX == 0)
+		$('.ui.sidebar').sidebar('show');
+});
+
+$('.message_prompts_close').click(function(){
+	$('.message_prompts').hide();
+});

@@ -21,7 +21,8 @@ Route::middleware(['auth'])->group(function () {
 	Route::match(['get', 'post'], 'home', 'ClientController@addNewRecord')
 			->name('home');
 
-	Route::get('clients', 'ClientController@clientList');
+	Route::get('clients', 'ClientController@clientList')
+			->name('client_list');
 
 	Route::get('clients/{client}', 'ClientController@clientInfo');
 
@@ -32,6 +33,12 @@ Route::middleware(['auth'])->group(function () {
 	Route::delete('clients/{client}', 'ClientController@removeClient');
 
 	Route::delete('records/{record}', 'RecordController@removeRecord');
+
+	Route::middleware(['admin'])->group(function(){
+		Route::middleware(['confidential_view'])->group(function(){
+			
+		});
+	});
 
 	Route::post('logout', 'AuthenticationController@logout')->name('logout');
 });

@@ -12,6 +12,9 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
+    "name"         => "The :attribute is incorrect.",
+    "alpha_space"         => "The :attribute may only contain letters and spaces.",
+    "alpha_num_space"     => "The :attribute may only contain letters, numbers and spaces.",
 
     'accepted' => 'The :attribute must be accepted.',
     'active_url' => 'The :attribute is not a valid URL.',
