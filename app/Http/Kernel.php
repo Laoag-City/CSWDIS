@@ -65,6 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'admin' => \App\Http\Middleware\AdminOnly::class,
-        'confidential_view' => \App\Http\Middleware\ConfidentialViewersOnly::class,
+        'confidential_view' => \App\Http\Middleware\ConfidentialViewersFilter::class,
     ];
 }

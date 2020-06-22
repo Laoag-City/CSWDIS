@@ -119,6 +119,11 @@ class ClientController extends Controller
 		return response()->json([], 403);
 	}
 
+	public function searchClients($search = null)
+	{
+		return Client::where('name', 'like', $search ? "%$search%" : "%{$this->request->name}%")->get();
+	}
+
 	public function clientList()
 	{
 		$search = null;
@@ -133,29 +138,32 @@ class ClientController extends Controller
 		]);
 	}
 
-	public function searchClient($search = null)
-	{
-		return Client::where('name', 'like', $search ? "%$search%" : "%{$this->request->name}%")->get();
-	}
-
 	public function clientInfo(Client $client)
 	{
 		if(Auth::user()->is_admin)
 		{
-			$records = Builder::table(with(new ConfidentialViewer)->getTable())
-								->where('user_id', Auth::user()->user_id)
-								->get();di pay nalpas 
+			$confidential_views_of_others = ConfidentialViewer::where('user_id', '!=', Auth::user()->user_id)
+													->get()
+													->pluck('record_id')
+													->toArray();
 
-			$records = ConfidentialViewer::where([
-				['user_id', '=', Auth::user()->user_id],
-				['']
-			]);
+			$records = Record::whereNotIn('record_id', $confidential_views_of_others)->get();
+		}
+
+		else
+		{
+			$non_confidential_services = Service::where('is_confidential', '=', false)
+											->get()
+											->pluck('service_id')
+											->toArray();
+
+			$records = Record::whereIn('service_id', $non_confidential_services)->get();
 		}
 
 		return view('client_info', [
 				'title' => 'Client Info',
 				'client' => $client,
-				'records' => '',
+				'records' => $records,
 			]);
 	}
 
