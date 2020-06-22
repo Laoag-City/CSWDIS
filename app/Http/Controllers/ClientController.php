@@ -24,10 +24,11 @@ class ClientController extends Controller
 						['user_id', '!=', Auth::user()->user_id]
 					])->get();
 		}
+
 		else
 		{
 			$services = Service::where('is_confidential', '=', false)->get();
-			$admins = [];
+			$admins = collect();
 		}
 
 		if($this->request->isMethod('get'))
@@ -129,7 +130,7 @@ class ClientController extends Controller
 		$search = null;
 
 		if($this->request->client)
-			$search = $this->searchClient($this->request->client);
+			$search = $this->searchClients($this->request->client);
 
 		return view('client_list', [
 			'title' => 'Client List',
@@ -212,7 +213,13 @@ class ClientController extends Controller
 
 	public function removeClient(Client $client)
 	{
+		$client_record_history = new ClientRecordHistory;
+		$client_record_history->user_id = Auth::user()->user_id;
+		$client_record_history->action = "Removed client {$client->name}";
+		$client_record_history->save();
+
 		$client->delete();
+
 		return redirect()->route('client_list');
 	}
 }

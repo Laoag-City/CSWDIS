@@ -26,20 +26,35 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('clients', 'ClientController@clientList')
 			->name('client_list');
 
-	Route::get('clients/{client}', 'ClientController@clientInfo');
+	Route::get('clients/{client}', 'ClientController@clientInfo')
+			->name('client');
 
 	Route::match(['get', 'put'], 'clients/{client}/edit', 'ClientController@editClient');
 
 	Route::delete('clients/{client}', 'ClientController@removeClient');
 
+	Route::middleware(['confidential_view'])->group(function(){
+		Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord');
+
+		Route::delete('records/{record}', 'RecordController@removeRecord');
+	});
+
 	Route::middleware(['admin'])->group(function(){
-		//user and services/categories routes here
+		Route::get('users-dashboard', 'AdminController@userDashboard');
 
-		Route::middleware(['confidential_view'])->group(function(){
-			Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord');
+		Route::post('user', 'AdminController@newUser');
 
-			Route::delete('records/{record}', 'RecordController@removeRecord');
-		});
+		Route::match(['get', 'put'], 'users/{user}', 'AdminController@editUser');
+
+		Route::delete('users/{user}', 'AdminController@removeUser');
+
+		Route::get('services-dashboard', 'AdminController@serviceDashboard');
+
+		Route::post('service', 'AdminController@newService');
+
+		Route::match(['get', 'put'], 'services/{service}', 'AdminController@editService');
+
+		Route::delete('services/{service}', 'AdminController@removeService');
 	});
 
 	Route::post('logout', 'AuthenticationController@logout')->name('logout');
