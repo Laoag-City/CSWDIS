@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
 		Route::match(['get', 'put'], 'services/{service}', 'AdminController@editService');
 
 		Route::delete('services/{service}', 'AdminController@removeService');
+
+		Route::delete('categories/{category}', 'AdminController@removeCategory');
 	});
 
 	Route::post('logout', 'AuthenticationController@logout')->name('logout');
