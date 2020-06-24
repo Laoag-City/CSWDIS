@@ -15,7 +15,9 @@ class RecordController extends Controller
     {
     	if(Auth::user()->is_admin)
 		{
-			$services = Service::all();
+			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
+				return $item->category->category;
+			});
 			$admins = User::where([
 						['is_admin', '=', true],
 						['user_id', '!=', Auth::user()->user_id]
@@ -24,7 +26,9 @@ class RecordController extends Controller
 
 		else
 		{
-			$services = Service::where('is_confidential', '=', false)->get();
+			$services = Service::where('is_confidential', '=', false)->get()->groupBy(function($item, $key){
+				return $item->category->category;
+			});
 			$admins = collect();
 		}
 

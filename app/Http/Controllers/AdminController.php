@@ -134,7 +134,8 @@ class AdminController extends Controller
         {
             return view('edit_service', [
                 'title' => 'Edit Service',
-                'user' => 
+                'service' => $service,
+                'categories' => Category::all()
             ]);
         }
 

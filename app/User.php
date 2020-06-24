@@ -18,11 +18,11 @@ class User extends Authenticatable
 
     public function confidential_viewers()
     {
-    	$this->hasMany('App\ConfidentialViewer', 'user_id', 'user_id');
+    	return $this->hasMany('App\ConfidentialViewer', 'user_id', 'user_id');
     }
 
     public function client_record_histories()
     {
-    	$this->hasMany('App\ClientRecordHistory', 'user_id', 'user_id');
+    	return $this->hasMany('App\ClientRecordHistory', 'user_id', 'user_id');
     }
 }

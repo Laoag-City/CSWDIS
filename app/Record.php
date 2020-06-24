@@ -10,21 +10,21 @@ class Record extends Model
 
     public function client()
     {
-    	$this->belongsTo('App\Client', 'client_id', 'client_id');
+    	return $this->belongsTo('App\Client', 'client_id', 'client_id');
     }
 
     public function service()
     {
-    	$this->belongsTo('App\Service', 'service_id', 'service_id');
+    	return $this->belongsTo('App\Service', 'service_id', 'service_id');
     }
 
     public function confidential_viewers()
     {
-    	$this->hasMany('App\ConfidentialViewer', 'record_id', 'record_id');
+    	return $this->hasMany('App\ConfidentialViewer', 'record_id', 'record_id');
     }
 
     public function client_record_histories()
     {
-    	$this->hasMany('App\ClientRecordHistory', 'record_id', 'record_id');
+    	return $this->hasMany('App\ClientRecordHistory', 'record_id', 'record_id');
     }
 }

@@ -10,11 +10,11 @@ class ConfidentialViewer extends Model
 
     public function record()
     {
-    	$this->belongsTo('App\Record', 'record_id', 'record_id');
+    	return $this->belongsTo('App\Record', 'record_id', 'record_id');
     }
 
     public function user()
     {
-    	$this->belongsTo('App\User', 'user_id', 'user_id');
+    	return $this->belongsTo('App\User', 'user_id', 'user_id');
     }
 }

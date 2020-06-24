@@ -18,7 +18,9 @@ class ClientController extends Controller
 	{
 		if(Auth::user()->is_admin)
 		{
-			$services = Service::all();
+			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
+				return $item->category->category;
+			});
 			$admins = User::where([
 						['is_admin', '=', true],
 						['user_id', '!=', Auth::user()->user_id]
@@ -27,7 +29,9 @@ class ClientController extends Controller
 
 		else
 		{
-			$services = Service::where('is_confidential', '=', false)->get();
+			$services = Service::where('is_confidential', '=', false)->get()->groupBy(function($item, $key){
+				return $item->category->category;
+			});
 			$admins = collect();
 		}
 
@@ -35,7 +39,7 @@ class ClientController extends Controller
 		{
 			return view('add_new_record', [
 				'title' => 'Add New Record',
-				'service' => $services,
+				'services' => $services,
 				'admins' => $admins
 			]);
 		}
