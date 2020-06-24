@@ -65,6 +65,30 @@
 		</div>
 	</div>
 
+	<div class="ui centered grid">
+		<div class="ten wide column">
+			<table class="ui selectable striped celled center aligned table">
+				<thead>
+					<tr>
+						<th>Admins</th>
+						<th class="collapsing">Allow Access</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					@foreach($admins as $admin)
+						<tr>
+							<td>{{ $admin->name }}</td>
+							<td class="collapsing">
+								<input type="checkbox" name="users[{{ $loop->iteration }}]" value="{{ $admin->user_id }}">
+							</td>
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 	<br>
 
 	<div class="field">
@@ -84,9 +108,12 @@
 		},
 
 		methods: {
-			checkIfSelectedServiceIsConfidential(e)
+			checkIfSelectedServiceIsConfidential(event)
 			{
-				console.log(e.target.selectedOptions[0].attributes['data-confidential'].value);
+				if(event.target.selectedOptions[0].attributes['data-confidential'].value == 'true')
+					this.selected_service_confidential = true;
+				else
+					this.selected_service_confidential = false;
 			}
 		}
 	});
