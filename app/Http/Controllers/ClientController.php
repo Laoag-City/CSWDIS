@@ -32,16 +32,16 @@ class ClientController extends Controller
 
 				if($selected_service && $selected_service->is_confidential)
 					$selected_service_is_confidential = 'true';
+
 				else
 					$selected_service_is_confidential = 'false';
+
 			}
 
 			else
 				$selected_service_is_confidential = 'false';
-
-			dd($services->flatten()->pluck('service_id')->toArray());
 		}
-
+madi degijay selected_service_is_confidential
 		else
 		{
 			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
@@ -57,7 +57,6 @@ class ClientController extends Controller
 				'title' => 'Add New Record',
 				'services' => $services,
 				'admins' => $admins,
-				'selected_service_is_confidential' => $selected_service_is_confidential
 			]);
 		}
 
@@ -72,7 +71,7 @@ class ClientController extends Controller
 				'age' => 'bail|required|integer|min:1|max:110',
 				'date_of_birth' => 'bail|required|date|before:now',
 
-				'service' => 'bail|required|in:' . implode(',', $services->pluck('service_id')->toArray()),
+				'service' => 'bail|required|in:' . implode(',', $services->flatten()->pluck('service_id')->toArray()),
 				'users' => 'bail|sometimes|array',
 				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('admin_id')->toArray()),
 
