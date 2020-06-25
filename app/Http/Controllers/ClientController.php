@@ -25,14 +25,30 @@ class ClientController extends Controller
 						['is_admin', '=', true],
 						['user_id', '!=', Auth::user()->user_id]
 					])->get();
+
+			if($this->request->service)
+			{
+				$selected_service = Service::find($this->request->service);
+
+				if($selected_service && $selected_service->is_confidential)
+					$selected_service_is_confidential = 'true';
+				else
+					$selected_service_is_confidential = 'false';
+			}
+
+			else
+				$selected_service_is_confidential = 'false';
+
+			dd($services->flatten()->pluck('service_id')->toArray());
 		}
 
 		else
 		{
-			$services = Service::where('is_confidential', '=', false)->get()->groupBy(function($item, $key){
+			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
 			$admins = collect();
+			$selected_service_is_confidential = 'false';
 		}
 
 		if($this->request->isMethod('get'))
@@ -40,7 +56,8 @@ class ClientController extends Controller
 			return view('add_new_record', [
 				'title' => 'Add New Record',
 				'services' => $services,
-				'admins' => $admins
+				'admins' => $admins,
+				'selected_service_is_confidential' => $selected_service_is_confidential
 			]);
 		}
 

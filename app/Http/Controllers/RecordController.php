@@ -26,7 +26,7 @@ class RecordController extends Controller
 
 		else
 		{
-			$services = Service::where('is_confidential', '=', false)->get()->groupBy(function($item, $key){
+			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
 			$admins = collect();
