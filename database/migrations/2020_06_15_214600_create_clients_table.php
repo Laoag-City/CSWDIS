@@ -19,7 +19,6 @@ class CreateClientsTable extends Migration
             $table->string('phone_no', 40);
             $table->string('address');
             $table->string('sex', 1);
-            $table->unsignedTinyInteger('age');
             $table->date('date_of_birth');
             $table->timestamps();
         });

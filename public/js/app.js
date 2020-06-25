@@ -25303,8 +25303,10 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 $("body").on("mousemove", function (event) {
   if (event.pageX == 0) $('.ui.sidebar').sidebar('show');
 });
-$('.message_prompts_close').click(function () {
-  $('.message_prompts').hide();
+$('body').ready(function () {
+  $('#message_prompts_close').click(function () {
+    $('#message_prompts').hide();
+  });
 });
 
 /***/ }),

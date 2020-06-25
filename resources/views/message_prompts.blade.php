@@ -1,6 +1,6 @@
 @if($errors->any())
-	<div class="ui error message message_prompts">
-		<i class="close icon message_prompts_close"></i>
+	<div id="message_prompts" class="ui error message">
+		<i id="message_prompts_close" class="close icon"></i>
 
 		<div class="header">
 		There were errors in your input.
@@ -13,8 +13,8 @@
 		</ul>
 	</div>
 @elseif(session('success') != null)
-<div class="ui success message message_prompts">
-		<i class="close icon message_prompts_close"></i>
+<div id="message_prompts" class="ui success message">
+		<i id="message_prompts_close" class="close icon"></i>
 
 		<div class="header">{{ session('success') }}</div>
 	</div>

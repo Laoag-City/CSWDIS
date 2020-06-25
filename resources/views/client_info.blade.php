@@ -2,4 +2,6 @@
 
 @section('main_content')
 
+sumaruno
+
 @endsection

@@ -21,7 +21,8 @@ Route::middleware(['auth'])->group(function () {
 	Route::match(['get', 'post'], 'home', 'ClientController@addNewRecord')
 			->name('home');
 
-	Route::get('client-search', 'ClientController@searchClients');
+	Route::get('client-search', 'ClientController@searchClients')
+			->name('search_client');
 
 	Route::get('clients', 'ClientController@clientList')
 			->name('client_list');
@@ -31,12 +32,8 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::match(['get', 'put'], 'clients/{client}/edit', 'ClientController@editClient');
 
-	Route::delete('clients/{client}', 'ClientController@removeClient');
-
 	Route::middleware(['confidential_view'])->group(function(){
 		Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord');
-
-		Route::delete('records/{record}', 'RecordController@removeRecord');
 	});
 
 	Route::middleware(['admin'])->group(function(){
@@ -57,6 +54,10 @@ Route::middleware(['auth'])->group(function () {
 		Route::delete('services/{service}', 'AdminController@removeService');
 
 		Route::delete('categories/{category}', 'AdminController@removeCategory');
+
+		Route::delete('clients/{client}', 'ClientController@removeClient');
+
+		Route::delete('records/{record}', 'RecordController@removeRecord');
 	});
 
 	Route::post('logout', 'AuthenticationController@logout')->name('logout');

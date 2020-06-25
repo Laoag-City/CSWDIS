@@ -17,4 +17,9 @@ class Client extends Model
     {
     	return $this->hasMany('App\ClientRecordHistory', 'client_id', 'client_id');
     }
+
+    public function toNiceBirthday()
+    {
+    	return date('M d, Y', strtotime($this->date_of_birth));
+    }
 }

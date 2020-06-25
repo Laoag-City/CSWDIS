@@ -45,9 +45,9 @@ class RecordController extends Controller
     	elseif($this->request->isMethod('put'))
     	{
     		$validator = Validator::make($this->request->all(), [
-				'service' => 'bail|required|in:' . implode(',', $services->pluck('service_id')->toArray()),
+				'service' => 'bail|required|in:' . implode(',', $services->flatten()->pluck('service_id')->toArray()),
 				'users' => 'bail|sometimes|array',
-				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('admin_id')->toArray()),
+				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('user_id')->toArray()),
 
 				'date_requested' => 'bail|required|date|before_or_equal:now',
 				'problem_presented' => 'bail|required|string|max:255',

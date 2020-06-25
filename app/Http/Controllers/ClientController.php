@@ -25,30 +25,14 @@ class ClientController extends Controller
 						['is_admin', '=', true],
 						['user_id', '!=', Auth::user()->user_id]
 					])->get();
-
-			if($this->request->service)
-			{
-				$selected_service = Service::find($this->request->service);
-
-				if($selected_service && $selected_service->is_confidential)
-					$selected_service_is_confidential = 'true';
-
-				else
-					$selected_service_is_confidential = 'false';
-
-			}
-
-			else
-				$selected_service_is_confidential = 'false';
 		}
-madi degijay selected_service_is_confidential
+
 		else
 		{
 			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
 			$admins = collect();
-			$selected_service_is_confidential = 'false';
 		}
 
 		if($this->request->isMethod('get'))
@@ -68,12 +52,11 @@ madi degijay selected_service_is_confidential
 				'phone_no' => 'bail|required|string|max:40',
 				'address' => 'bail|required|string:max:255',
 				'sex' => 'bail|required|in:M,F',
-				'age' => 'bail|required|integer|min:1|max:110',
 				'date_of_birth' => 'bail|required|date|before:now',
 
 				'service' => 'bail|required|in:' . implode(',', $services->flatten()->pluck('service_id')->toArray()),
 				'users' => 'bail|sometimes|array',
-				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('admin_id')->toArray()),
+				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('user_id')->toArray()),
 
 				'date_requested' => 'bail|required|date|before_or_equal:now',
 				'problem_presented' => 'bail|required|string|max:255',
@@ -96,7 +79,6 @@ madi degijay selected_service_is_confidential
 			$client->phone_no = $this->request->phone_no;
 			$client->address = $this->request->address;
 			$client->sex = $this->request->sex;
-			$client->age = $this->request->age;
 			$client->date_of_birth = $this->request->date_of_birth;
 			$client->save();
 
@@ -154,8 +136,7 @@ madi degijay selected_service_is_confidential
 
 		return view('client_list', [
 			'title' => 'Client List',
-			'clients' => Client::latest()->paginate(100),
-			'search' => $search
+			'clients' => $search ? $search : Client::latest()->paginate(100),
 		]);
 	}
 
@@ -205,7 +186,6 @@ madi degijay selected_service_is_confidential
 				'phone_no' => 'bail|required|string|max:40',
 				'address' => 'bail|required|string:max:255',
 				'sex' => 'bail|required|in:M,F',
-				'age' => 'bail|required|integer|min:1|max:110',
 				'date_of_birth' => 'bail|required|date|before:now',
 			]);
 
@@ -215,7 +195,6 @@ madi degijay selected_service_is_confidential
 			$client->phone_no = $this->request->phone_no;
 			$client->address = $this->request->address;
 			$client->sex = $this->request->sex;
-			$client->age = $this->request->age;
 			$client->date_of_birth = $this->request->date_of_birth;
 			$client->save();
 

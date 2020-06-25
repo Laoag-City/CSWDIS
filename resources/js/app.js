@@ -32,6 +32,8 @@ $("body").on("mousemove",function(event) {
 		$('.ui.sidebar').sidebar('show');
 });
 
-$('.message_prompts_close').click(function(){
-	$('.message_prompts').hide();
+$('body').ready(function(){
+        $('#message_prompts_close').click(function(){
+        $('#message_prompts').hide();
+    });
 });
