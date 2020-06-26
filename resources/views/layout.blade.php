@@ -27,6 +27,11 @@
 <body>
     @auth
     <div class="ui sidebar inverted vertical menu">
+        <a class="item" href="#" title="{{ Auth::user()->username }} {{ Auth::user()->is_admin ? '(Admin)' : '' }}">
+            <i class="user icon"></i>
+            Logged in as...
+        </a>
+
         <a class="item" href="{{ route('home') }}">
             <i class="add icon"></i>
             New Client Record

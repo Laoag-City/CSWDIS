@@ -143,14 +143,7 @@ class ClientController extends Controller
 	public function clientInfo(Client $client)
 	{
 		if(Auth::user()->is_admin)
-		{
-			$confidential_views_of_others = ConfidentialViewer::where('user_id', '!=', Auth::user()->user_id)
-													->get()
-													->pluck('record_id')
-													->toArray();
-
-			$records = Record::whereNotIn('record_id', $confidential_views_of_others)->get();
-		}
+			$records = Record::where('client_id', $client->client_id)->with(['confidential_viewers', 'service'])->get();
 
 		else
 		{
@@ -159,7 +152,7 @@ class ClientController extends Controller
 											->pluck('service_id')
 											->toArray();
 
-			$records = Record::whereIn('service_id', $non_confidential_services)->get();
+			$records = Record::whereIn('service_id', $non_confidential_services)->with(['service'])->get();
 		}
 
 		return view('client_info', [

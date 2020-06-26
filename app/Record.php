@@ -27,4 +27,9 @@ class Record extends Model
     {
     	return $this->hasMany('App\ClientRecordHistory', 'record_id', 'record_id');
     }
+
+    public function toNiceDate($field)
+    {
+        return date('M d, Y', strtotime($this->$field));
+    }
 }
