@@ -13,31 +13,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::match(['get', 'post'], '/', 'AuthenticationController@login')
+Route::match(['get', 'post'], '/', 'AuthenticationController@login')//DONE
 		->name('login')
 		->middleware('guest');
 
 Route::middleware(['auth'])->group(function () {
-	Route::match(['get', 'post'], 'home', 'ClientController@addNewRecord')
+	Route::match(['get', 'post'], 'home', 'ClientController@addNewRecord')//DONE
 			->name('home');
 
-	Route::get('client-search', 'ClientController@searchClients')
+	Route::get('client-search', 'ClientController@searchClients')//DONE
 			->name('search_client');
 
-	Route::get('clients', 'ClientController@clientList')
+	Route::get('clients', 'ClientController@clientList')//DONE
 			->name('client_list');
 
-	Route::get('clients/{client}', 'ClientController@clientInfo')
+	Route::get('clients/{client}', 'ClientController@clientInfo')//DONE
 			->name('client');
 
-	Route::match(['get', 'put'], 'clients/{client}/edit', 'ClientController@editClient');
+	Route::match(['get', 'put'], 'clients/{client}/edit', 'ClientController@editClient')//DONE
+			->name('edit_client');
 
 	Route::middleware(['confidential_view'])->group(function(){
-		Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord');
+		Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord')
+				->name('edit_record');
 	});
 
 	Route::middleware(['admin'])->group(function(){
-		Route::get('users-dashboard', 'AdminController@userDashboard');
+		Route::get('users-dashboard', 'AdminController@userDashboard')
+					->name('users-dashboard');
 
 		Route::post('user', 'AdminController@newUser');
 
@@ -55,10 +58,12 @@ Route::middleware(['auth'])->group(function () {
 
 		Route::delete('categories/{category}', 'AdminController@removeCategory');
 
-		Route::delete('clients/{client}', 'ClientController@removeClient');
+		Route::delete('clients/{client}', 'ClientController@removeClient')//DONE
+					->name('remove_client');
 
-		Route::delete('records/{record}', 'RecordController@removeRecord');
+		Route::delete('records/{record}', 'RecordController@removeRecord')
+					->name('remove_record');//DONE
 	});
 
-	Route::post('logout', 'AuthenticationController@logout')->name('logout');
+	Route::post('logout', 'AuthenticationController@logout')->name('logout');//DONE
 });

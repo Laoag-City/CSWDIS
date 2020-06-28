@@ -2,8 +2,43 @@
 
 @section('main_content')
 
+<div class="ui basic modal">
+	<div class="ui icon header">
+		<i class="remove icon"></i>
+		Delete @{{ delete_title }}?
+	</div>
+
+	<div class="content">
+		<p>Are you sure you want to delete @{{ delete_name }}?</p>
+	</div>
+
+	<form method="POST" :action="form_action" class="actions">
+		@csrf
+		@method('DELETE')
+		
+		<div class="ui grey basic cancel inverted button" @click="closeModal">
+			<i class="remove icon"></i>
+			No
+		</div>
+		<button type="submit" class="ui red ok inverted button">
+			<i class="checkmark icon"></i>
+			Yes
+		</button>
+	</form>
+</div>
+
 <div class="sixteen wide column">
-	<a href="{{ url()->previous() }}" class="ui blue button" style="float: right;">Back</a>
+	<div class="ui buttons" style="float: right;">
+		<a href="{{ route('edit_client', ['client' => $client->client_id]) }}" class="ui yellow button">Edit</a>
+		@if(Auth::user()->is_admin)
+			<a href="#"
+				class="ui red button"
+				@click="openModal('{{ route('remove_client', ['client' => $client->client_id]) }}', '{{ $client->name }}', 'Client')">
+				Remove
+			</a>
+		@endif
+		<a href="{{ route('client_list') }}" class="ui blue button">Back</a>
+	</div>
 </div>
 
 <div class="row">
@@ -86,8 +121,14 @@
 						<div class="content">
 							<div class="transition hidden">
 								<div class="ui buttons" style="float: right;">
-									<a href="" class="ui mini yellow button">Edit</a>
-									<a href="" class="ui mini red button">Remove</a>
+									<a href="{{ route('edit_record', ['record' => $record->record_id]) }}" class="ui mini yellow button">Edit</a>
+									@if(Auth::user()->is_admin)
+										<a href="#"
+											class="ui red button"
+											@click="openModal('{{ route('remove_record', ['record' => $record->record_id]) }}', '{{ $record->service->service }} (Date requested: {{ $record->toNiceDate('date_requested') }}, Action Taken Date: {{ $record->toNiceDate('action_taken_date') }})', 'Record')">
+											Remove
+										</a>
+									@endif
 								</div>
 
 
@@ -119,6 +160,33 @@
 
 @section('custom_js')
 <script>
+	const app = new Vue({
+		el: '#main',
+
+		data: {
+			form_action: '',
+			delete_name: '',
+			delete_title: ''
+
+		},
+
+		methods: {
+			openModal: function(url, name, title){
+				this.form_action = url;
+				this.delete_name = name;
+				this.delete_title = title;
+				$('.ui.basic.modal').modal('show');
+			},
+
+			closeModal: function(){
+				this.form_action = '';
+				this.delete_name = '';
+				this.delete_title = '';
+				$('.ui.basic.modal').modal('hide');
+			}
+		}
+	});
+
 	$('.ui.accordion').accordion();
 </script>
 @endsection

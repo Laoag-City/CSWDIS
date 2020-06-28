@@ -18,16 +18,21 @@ class ConfidentialViewersFilter
      */
     public function handle($request, Closure $next)
     {
-        $confidential_views_of_others = ConfidentialViewer::where('user_id', '!=', Auth::user()->user_id)
-                                                ->get()
-                                                ->pluck('record_id')
-                                                ->toArray();
+        if($request->route('record'))
+        {
+            if($request->route('record')->service->is_confidential)
+            {
+                if($request->route('record')->confidential_viewers->contains(Auth::user()->user_id))
+                    return $next($request);
+                else
+                    return back();
+            }
 
-        $records = Record::whereNotIn('record_id', $confidential_views_of_others)->get();
+            else
+                return $next($request);
+        }
 
-        if(!$records->contains('record_id', $request->route('record'))
+        else
             return back();
-
-        return $next($request);
     }
 }

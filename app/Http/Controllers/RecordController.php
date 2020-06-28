@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\ConfidentialViewer;
 use App\ClientRecordHistory;
 use App\Record;
+use App\Service;
+use App\User;
 
 class RecordController extends Controller
 {
@@ -37,7 +39,7 @@ class RecordController extends Controller
     		return view('edit_record', [
 				'title' => 'Edit Record Info',
 				'record' => $record,
-				'service' => $services,
+				'services' => $services,
 				'admins' => $admins
 			]);
     	}

@@ -36,10 +36,19 @@
             <i class="add icon"></i>
             New Client Record
         </a>
+
         <a class="item" href="{{ route('client_list') }}">
             <i class="list icon"></i>
             Client List
         </a>
+
+        @if(Auth::user()->is_admin)
+            <a class="item" href="{{ route('users-dashboard') }}">
+                <i class="users icon"></i>
+                User Management
+            </a>
+        @endif
+
         <a class="item"  href="#" onclick="event.preventDefault(); document.getElementById('logout_form').submit();">
             <i class="sign out icon"></i>
             Log Out
