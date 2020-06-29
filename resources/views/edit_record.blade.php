@@ -64,10 +64,21 @@
 				<tbody>
 					@foreach($admins as $admin)
 						@php
-							if(isset(old("users")[$loop->iteration]) && old("users")[$loop->iteration] == $admin->user_id)
-								$checked = 'checked';
+							if(old('users'))
+							{
+								if(old("users")[$loop->iteration] == $admin->user_id)
+									$checked = 'checked';
+								else
+									$checked = '';
+							}
+
 							else
-								$checked = '';sumaruno ditoy
+							{
+								if($confidential_viewers->contains($admin->user_id))
+									$checked = 'checked';
+								else
+									$checked = '';
+							}
 						@endphp
 						<tr>
 							<td>{{ $admin->name }}</td>

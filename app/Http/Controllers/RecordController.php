@@ -24,6 +24,11 @@ class RecordController extends Controller
 						['is_admin', '=', true],
 						['user_id', '!=', Auth::user()->user_id]
 					])->get();
+
+			$confidential_viewers = ConfidentialViewer::where([
+				['record_id', '=', $record->record_id],
+				['user_id', '!=', Auth::user()->user_id]
+			])->get()->pluck('user_id');
 		}
 
 		else
@@ -32,6 +37,8 @@ class RecordController extends Controller
 				return $item->category->category;
 			});
 			$admins = collect();
+
+			$confidential_viewers = [];
 		}
 
     	if($this->request->isMethod('get'))
@@ -39,6 +46,7 @@ class RecordController extends Controller
     		return view('edit_record', [
 				'title' => 'Edit Record Info',
 				'record' => $record,
+				'confidential_viewers' => $confidential_viewers,
 				'services' => $services,
 				'admins' => $admins
 			]);
