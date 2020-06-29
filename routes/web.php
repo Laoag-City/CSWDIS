@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-test lang
+
 Route::match(['get', 'post'], '/', 'AuthenticationController@login')//DONE
 		->name('login')
 		->middleware('guest');
