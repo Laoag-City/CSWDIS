@@ -100,13 +100,14 @@ class ClientController extends Controller
 				$confidential_viewer->user_id = Auth::user()->user_id;
 				$confidential_viewer->save();
 
-				foreach($this->request->users as $user_id)
-				{
-					$confidential_viewer = new ConfidentialViewer;
-					$confidential_viewer->record_id = $record->record_id;
-					$confidential_viewer->user_id = $user_id;
-					$confidential_viewer->save();
-				}
+				if($this->request->users)
+					foreach($this->request->users as $user_id)
+					{
+						$confidential_viewer = new ConfidentialViewer;
+						$confidential_viewer->record_id = $record->record_id;
+						$confidential_viewer->user_id = $user_id;
+						$confidential_viewer->save();
+					}
 			}
 
 			$client_record_history = new ClientRecordHistory;

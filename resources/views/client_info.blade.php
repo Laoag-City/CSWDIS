@@ -121,7 +121,7 @@
 						<div class="content">
 							<div class="transition hidden">
 								<div class="ui buttons" style="float: right;">
-									<a href="{{ route('edit_record', ['record' => $record->record_id]) }}" class="ui mini yellow button">Edit</a>
+									<a href="{{ route('edit_record', ['record' => $record->record_id]) }}" class="ui yellow button">Edit</a>
 									@if(Auth::user()->is_admin)
 										<a href="#"
 											class="ui red button"

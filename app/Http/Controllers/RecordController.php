@@ -80,22 +80,23 @@ class RecordController extends Controller
 			$record->action_taken_date = $this->request->action_taken_date;
 			$record->save();
 
+			ConfidentialViewer::where('record_id', $record->record_id)->delete();
+
 			if($service->is_confidential)
 			{
-				ConfidentialViewer::where('record_id', $record->record_id)->delete();
-
 				$confidential_viewer = new ConfidentialViewer;
 				$confidential_viewer->record_id = $record->record_id;
 				$confidential_viewer->user_id = Auth::user()->user_id;
 				$confidential_viewer->save();
 
-				foreach($this->request->users as $user_id)
-				{
-					$confidential_viewer = new ConfidentialViewer;
-					$confidential_viewer->record_id = $record->record_id;
-					$confidential_viewer->user_id = $user_id;
-					$confidential_viewer->save();
-				}
+				if($this->request->users)
+					foreach($this->request->users as $user_id)
+					{
+						$confidential_viewer = new ConfidentialViewer;
+						$confidential_viewer->record_id = $record->record_id;
+						$confidential_viewer->user_id = $user_id;
+						$confidential_viewer->save();
+					}
 			}
 
 			$client_record_history = new ClientRecordHistory;
@@ -105,7 +106,7 @@ class RecordController extends Controller
 			$client_record_history->action = 'Updated record info';
 			$client_record_history->save();
 
-			return back()->with('success', "A new record has been added successfully.");
+			return back()->with('success', "Record has been updated successfully.");
     	}
 
     	return response()->json([], 403);

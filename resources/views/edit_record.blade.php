@@ -66,7 +66,7 @@
 						@php
 							if(old('users'))
 							{
-								if(old("users")[$loop->iteration] == $admin->user_id)
+								if(isset(old("users")[$loop->iteration]) && old("users")[$loop->iteration] == $admin->user_id)
 									$checked = 'checked';
 								else
 									$checked = '';
