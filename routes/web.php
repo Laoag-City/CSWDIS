@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 			->name('edit_client');
 
 	Route::middleware(['confidential_view'])->group(function(){
-		Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord')
+		Route::match(['get', 'put'], 'records/{record}/edit', 'RecordController@editRecord')//DONE
 				->name('edit_record');
 	});
 
