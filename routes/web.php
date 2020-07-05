@@ -40,21 +40,28 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::middleware(['admin'])->group(function(){
 		Route::get('users-dashboard', 'AdminController@userDashboard')
-					->name('users-dashboard');
+					->name('users_dashboard');//DONE
 
-		Route::post('user', 'AdminController@newUser');
+		Route::post('user', 'AdminController@newUser')
+					->name('new_user');//DONE
 
-		Route::match(['get', 'put'], 'users/{user}', 'AdminController@editUser');
+		Route::match(['get', 'put'], 'users/{user}', 'AdminController@editUser')
+					->name('edit_user');//DONE
 
-		Route::delete('users/{user}', 'AdminController@removeUser');
+		Route::delete('users/{user}', 'AdminController@removeUser')
+					->name('remove_user');//DONE
 
-		Route::get('services-dashboard', 'AdminController@serviceDashboard');
+		Route::get('services-dashboard', 'AdminController@serviceDashboard')
+					->name('services_dashboard');
 
-		Route::post('service', 'AdminController@newService');
+		Route::post('service', 'AdminController@newService')
+					->name('new_service');
 
-		Route::match(['get', 'put'], 'services/{service}', 'AdminController@editService');
+		Route::match(['get', 'put'], 'services/{service}', 'AdminController@editService')
+					->name('edit_service');
 
-		Route::delete('services/{service}', 'AdminController@removeService');
+		Route::delete('services/{service}', 'AdminController@removeService')
+					->name('remove_service');
 
 		Route::delete('categories/{category}', 'AdminController@removeCategory');
 

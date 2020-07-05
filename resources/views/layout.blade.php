@@ -43,9 +43,14 @@
         </a>
 
         @if(Auth::user()->is_admin)
-            <a class="item" href="{{ route('users-dashboard') }}">
+            <a class="item" href="{{ route('users_dashboard') }}">
                 <i class="users icon"></i>
-                User Management
+                User Dashboard
+            </a>
+
+            <a class="item" href="{{ route('services_dashboard') }}">
+                <i class="users icon"></i>
+                Service Dashboard
             </a>
         @endif
 

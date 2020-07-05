@@ -25,14 +25,14 @@ class AdminController extends Controller
             'name' => 'bail|required|string|name|max:100',
             'username' => 'bail|required|string|alpha_dash|max:30|unique:users,username',
             'password' => 'bail|required|string|min:5|confirmed',
-            'is_admin' => 'bail|required|boolean'
+            'admin_level' => 'bail|required|boolean'
         ])->validate();
 
         $user = new User;
         $user->name = $this->request->name;
         $user->username = $this->request->username;
         $user->password = bcrypt($this->request->password);
-        $user->is_admin = $this->request->is_admin;
+        $user->is_admin = $this->request->admin_level;
         $user->save();
 
         return back()->with('success', "Added a new user.");
@@ -54,18 +54,17 @@ class AdminController extends Controller
                 'name' => 'bail|required|string|name|max:100',
                 'username' => 'bail|required|string|alpha_dash|max:30|unique:users,username,' . $user->user_id . ',user_id',
                 'password' => 'bail|nullable|string|min:5|confirmed',
-                'is_admin' => 'bail|required|boolean'
+                'admin_level' => 'bail|required|boolean'
             ])->validate();
 
-            $user = new User;
             $user->name = $this->request->name;
             $user->username = $this->request->username;
             $user->password = $this->request->password ? bcrypt($this->request->password) : $user->password;
 
-            if($user->is_admin && !$this->request->is_admin)
+            if($user->is_admin && !$this->request->admin_level)
                 ConfidentialViewer::where('user_id', '=', $user->user_id)->delete();
 
-            $user->is_admin = $this->request->is_admin;
+            $user->is_admin = $this->request->admin_level;
             $user->save();
 
             return back()->with('success', "User info updated.");
@@ -106,7 +105,7 @@ class AdminController extends Controller
             'service' => 'bail|required|string|max:255|unique:services,service',
             'category'  => $category_rule,
             'new_category' => 'bail|required|boolean',
-            'is_confidential' => 'bail|required|boolean'
+            'confidential_service' => 'bail|required|boolean'
         ])->validate();
 
         if($this->request->new_category)
@@ -122,7 +121,7 @@ class AdminController extends Controller
         $service = new Service;
         $service->category = $category->category_id;
         $service->service = $this->request->service;
-        $service->is_confidential = $this->request->is_confidential;
+        $service->is_confidential = $this->request->confidential_service;
         $service->save();
 
         return back()->with('success', "Added a new service.");
@@ -156,7 +155,7 @@ class AdminController extends Controller
                 'service' => 'bail|required|string|max:255|unique:services,service,' . $service->service_id . ',service_id',
                 'category'  => $category_rule,
                 'new_category' => 'bail|required|boolean',
-                'is_confidential' => 'bail|required|boolean'
+                'confidential_service' => 'bail|required|boolean'
             ])->validate();
 
             if($this->request->new_category)
@@ -171,7 +170,7 @@ class AdminController extends Controller
 
             $service->category = $category->category_id;
             $service->service = $this->request->service;
-            $service->is_confidential = $this->request->is_confidential;
+            $service->is_confidential = $this->request->confidential_service;
             $service->save();
 
             return back()->with('success', "Service info updated.");
