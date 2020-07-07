@@ -49,7 +49,7 @@
             </a>
 
             <a class="item" href="{{ route('services_dashboard') }}">
-                <i class="users icon"></i>
+                <i class="hands helping icon"></i>
                 Service Dashboard
             </a>
         @endif

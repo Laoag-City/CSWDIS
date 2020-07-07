@@ -3,6 +3,8 @@
 @section('main_content')
 
 <div class="six wide column">
+	<h3 style="text-align: center">New User</h3>
+
 	<form class="ui form {{ $errors->any() ? 'error' : 'success' }}" method="POST" action="{{ route('new_user') }}">
 		@csrf
 
