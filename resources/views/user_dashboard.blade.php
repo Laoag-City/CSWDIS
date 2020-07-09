@@ -71,7 +71,7 @@
 
 	<h3 style="text-align: center">User List</h3>
 
-	<table class="ui selectable striped celled center aligned table">
+	<table class="ui selectable striped celled center aligned table" style="margin-bottom: 50px;">
 		<thead>
 			<tr>
 				<th>Name</th>

@@ -17,7 +17,7 @@
 		<input type="text" name="category" value="{{ old('category') ? old('category') : $category->category }}">
 	</div>
 
-	<button type="submit" class="ui fluid inverted blue button">Edit Service</button>
+	<button type="submit" class="ui fluid inverted blue button">Edit Category</button>
 </form>
 
 @endsection

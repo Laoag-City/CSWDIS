@@ -140,7 +140,7 @@
 	<br>
 
 	<div class="field">
-		<button type="submit" class="ui fluid inverted blue button">Add Record</button>
+		<button type="submit" class="ui fluid inverted blue button">Edit Record</button>
 	</div>
 </form>
 

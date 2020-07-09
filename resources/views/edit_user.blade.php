@@ -48,7 +48,7 @@
 		</select>
 	</div>
 
-	<button type="submit" class="ui fluid inverted blue button">Add User</button>
+	<button type="submit" class="ui fluid inverted blue button">Edit User</button>
 </form>
 
 @endsection

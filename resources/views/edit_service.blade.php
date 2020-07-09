@@ -30,7 +30,7 @@
 		
 		<div class="ui action input" v-if="category_field_new">
 			<input type="text" name="category" value="{{ old('category') }}">
-			<button type="button" class="ui button" @click="category_field_new = false">Existing Categories</button>
+			<button type="button" class="ui button" @click="category_field_new = false">Switch to Existing Categories</button>
 		</div>
 
 		<div class="ui action input" v-if="!category_field_new">
@@ -44,7 +44,7 @@
 					</option>
 				@endforeach
 			</select>
-			<button type="button" class="ui button" @click="category_field_new = true">New Category</button>
+			<button type="button" class="ui button" @click="category_field_new = true">Switch to New Category</button>
 		</div>
 	</div>
 

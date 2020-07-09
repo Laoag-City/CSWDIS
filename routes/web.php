@@ -52,21 +52,25 @@ Route::middleware(['auth'])->group(function () {
 					->name('remove_user');//DONE
 
 		Route::get('services-dashboard', 'AdminController@serviceDashboard')
-					->name('services_dashboard');
+					->name('services_dashboard');//DONE
 
 		Route::post('service', 'AdminController@newService')
-					->name('new_service');
+					->name('new_service');//DONE
 
 		Route::match(['get', 'put'], 'services/{service}', 'AdminController@editService')
-					->name('edit_service');
+					->name('edit_service');//DONE
+
+		Route::match(['get', 'put'], 'categories/{category}', 'AdminController@editCategory')
+					->name('edit_category');//DONE
 
 		Route::delete('services/{service}', 'AdminController@removeService')
-					->name('remove_service');
+					->name('remove_service');//DONE
 
-		Route::delete('categories/{category}', 'AdminController@removeCategory');
+		Route::delete('categories/{category}', 'AdminController@removeCategory')
+					->name('remove_category');//DONE
 
-		Route::delete('clients/{client}', 'ClientController@removeClient')//DONE
-					->name('remove_client');
+		Route::delete('clients/{client}', 'ClientController@removeClient')
+					->name('remove_client');//DONE
 
 		Route::delete('records/{record}', 'RecordController@removeRecord')
 					->name('remove_record');//DONE

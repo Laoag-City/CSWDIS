@@ -92,34 +92,34 @@ class AdminController extends Controller
     {
         $category_rule = 'bail|required';
 
-        if(gettype($this->request->new_category) == 'boolean')
+        if($this->request->new_category != null)
         {
-            if($this->request->new_category)
+            if($this->request->new_category == 'true')
                 $category_rule .= '|string|max:255';
 
-            else
+            elseif($this->request->new_category == 'false')
                 $category_rule .= '|exists:categories,category_id';
         }
 
     	$validator = Validator::make($this->request->all(), [
             'service' => 'bail|required|string|max:255|unique:services,service',
             'category'  => $category_rule,
-            'new_category' => 'bail|required|boolean',
+            'new_category' => 'bail|required|in:true,false',
             'confidential_service' => 'bail|required|boolean'
         ])->validate();
 
-        if($this->request->new_category)
+        if($this->request->new_category == 'true')
         {
             $category = new Category;
             $category->category = $this->request->category;
             $category->save();
         }
 
-        else
+        elseif($this->request->new_category == 'false')
             $category = Category::find($this->request->category);
 
         $service = new Service;
-        $service->category = $category->category_id;
+        $service->category_id = $category->category_id;
         $service->service = $this->request->service;
         $service->is_confidential = $this->request->confidential_service;
         $service->save();
@@ -142,38 +142,63 @@ class AdminController extends Controller
         {
             $category_rule = 'bail|required';
 
-            if(gettype($this->request->new_category) == 'boolean')
+            if($this->request->new_category != null)
             {
-                if($this->request->new_category)
+                if($this->request->new_category == 'true')
                     $category_rule .= '|string|max:255';
 
-                else
+                elseif($this->request->new_category == 'false')
                     $category_rule .= '|exists:categories,category_id';
             }
 
             $validator = Validator::make($this->request->all(), [
                 'service' => 'bail|required|string|max:255|unique:services,service,' . $service->service_id . ',service_id',
                 'category'  => $category_rule,
-                'new_category' => 'bail|required|boolean',
+                'new_category' => 'bail|required|in:true,false',
                 'confidential_service' => 'bail|required|boolean'
             ])->validate();
 
-            if($this->request->new_category)
+            if($this->request->new_category == 'true')
             {
                 $category = new Category;
                 $category->category = $this->request->category;
                 $category->save();
             }
 
-            else
+            elseif($this->request->new_category == 'false')
                 $category = Category::find($this->request->category);
 
-            $service->category = $category->category_id;
+            $service->category_id = $category->category_id;
             $service->service = $this->request->service;
             $service->is_confidential = $this->request->confidential_service;
             $service->save();
 
             return back()->with('success', "Service info updated.");
+        }
+
+        return response()->json([], 403);
+    }
+
+    public function editCategory(Category $category)
+    {
+        if($this->request->isMethod('get'))
+        {
+            return view('edit_category', [
+                'title' => 'Edit Category',
+                'category' => $category
+            ]);
+        }
+
+        elseif($this->request->isMethod('put'))
+        {
+            Validator::make($this->request->all(), [
+                'category' => "bail|required|string|max:255|unique:categories,category,{$category->category_id},category_id"
+            ])->validate();
+
+            $category->category = $this->request->category;
+            $category->save();
+
+            return back()->with('success', "Category info updated.");
         }
 
         return response()->json([], 403);

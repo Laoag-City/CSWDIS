@@ -2,8 +2,33 @@
 
 @section('main_content')
 
+<div class="ui basic modal">
+	<div class="ui icon header">
+		<i class="remove icon"></i>
+		Delete @{{ modal_title }}?
+	</div>
+
+	<div class="content">
+		<p>Are you sure you want to delete @{{ delete_name }}?</p>
+	</div>
+
+	<form method="POST" :action="form_action" class="actions">
+		@csrf
+		@method('DELETE')
+		
+		<div class="ui grey basic cancel inverted button" @click="closeModal">
+			<i class="remove icon"></i>
+			No
+		</div>
+		<button type="submit" class="ui red ok inverted button">
+			<i class="checkmark icon"></i>
+			Yes
+		</button>
+	</form>
+</div>
+
 <div class="row">
-	<div class="eight wide column">
+	<div class="ten wide column">
 		<h3 style="text-align: center">New Service</h3>
 
 		<form class="ui form {{ $errors->any() ? 'error' : 'success' }}" method="POST" action="{{ route('new_service') }}">
@@ -11,12 +36,14 @@
 
 			@include('message_prompts')
 
+			<input type="hidden" name="new_category" v-model="category_field_new">
+
 			<div class="field {{ !$errors->has('category') ?: 'error' }}">
 				<label>Category</label>
 				
 				<div class="ui action input" v-if="category_field_new">
 					<input type="text" name="category" value="{{ old('category') }}">
-					<button type="button" class="ui button" @click="category_field_new = false">Existing Categories</button>
+					<button type="button" class="ui mini button" @click="category_field_new = false">Switch to Existing Categories</button>
 				</div>
 
 				<div class="ui action input" v-if="!category_field_new">
@@ -30,7 +57,7 @@
 							</option>
 						@endforeach
 					</select>
-					<button type="button" class="ui button" @click="category_field_new = true">New Category</button>
+					<button type="button" class="ui mini button" @click="category_field_new = true">Switch to New Category</button>
 				</div>
 			</div>
 
@@ -48,38 +75,13 @@
 				</select>
 			</div>
 
-			<button type="submit" class="ui fluid inverted blue button">Add User</button>
+			<button type="submit" class="ui fluid inverted blue button">Add Service</button>
 		</form>
 	</div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-top: 25px;">
 	<div class="sixteen wide column">
-		<div class="ui basic modal">
-			<div class="ui icon header">
-				<i class="remove icon"></i>
-				Delete User?
-			</div>
-
-			<div class="content">
-				<p>Are you sure you want to delete @{{ delete_name }}?</p>
-			</div>
-
-			<form method="POST" :action="form_action" class="actions">
-				@csrf
-				@method('DELETE')
-				
-				<div class="ui grey basic cancel inverted button" @click="closeModal">
-					<i class="remove icon"></i>
-					No
-				</div>
-				<button type="submit" class="ui red ok inverted button">
-					<i class="checkmark icon"></i>
-					Yes
-				</button>
-			</form>
-		</div>
-
 		<h3 style="text-align: center">Service List</h3>
 
 		<table class="ui selectable striped celled center aligned table">
@@ -107,7 +109,46 @@
 										<a href="{{ route('edit_service', ['service' => $service->service_id]) }}" class="item">Edit</a>
 										<a href="#"
 											class="item"
-											@click="openModal('{{ route('remove_service', ['service' => $service->service_id]) }}', '{{ $service->name }}')">
+											@click="openModal('{{ route('remove_service', ['service' => $service->service_id]) }}', '{{ $service->service }}', 'Service')">
+											Remove
+										</a>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="row" style="margin-top: 25px;">
+	<div class="sixteen wide column">
+		<h3 style="text-align: center">Category List</h3>
+
+		<table class="ui selectable striped celled center aligned table" style="margin-bottom: 50px;">
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th class="collapsing"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				@foreach($categories as $category)
+					<tr>
+						<td>{{ $category->category }}</td>
+						<td>
+							<div class="ui mini compact menu">
+								<div class="ui simple dropdown item">
+									<i class="cogs icon"></i>
+									<i class="dropdown icon"></i>
+									<div class="menu">
+										<a href="{{ route('edit_category', ['category' => $category->category_id]) }}" class="item">Edit</a>
+										<a href="#"
+											class="item"
+											@click="openModal('{{ route('remove_category', ['category' => $category->category_id]) }}', '{{ $category->category }}', 'Category')">
 											Remove
 										</a>
 									</div>
@@ -130,6 +171,7 @@
 		el: '#main',
 
 		data: {
+			modal_title: '',
 			form_action: '',
 			delete_name: '',
 			category_field_new: false
@@ -137,13 +179,15 @@
 		},
 
 		methods: {
-			openModal: function(url, name){
+			openModal: function(url, name, title){
+				this.modal_title = title;
 				this.form_action = url;
 				this.delete_name = name;
 				$('.ui.basic.modal').modal('show');
 			},
 
 			closeModal: function(){
+				this.modal_title = '';
 				this.form_action = '';
 				this.delete_name = '';
 				$('.ui.basic.modal').modal('hide');
