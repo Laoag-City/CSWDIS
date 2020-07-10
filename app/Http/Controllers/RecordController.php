@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\ConfidentialViewer;
 use App\ClientRecordHistory;
+use App\Client;
 use App\Record;
 use App\Service;
 use App\User;
@@ -123,5 +124,18 @@ class RecordController extends Controller
 
 		$record->delete();
 		return redirect()->route('client', ['client' => $client_id]);
+	}
+
+	public function getStats()
+	{
+		$clients = Client::all();
+		$records = Record::with(['service'])->get();
+
+		$total_males = Client::where('sex', 'M')->count();
+		$total_females = Client::where('sex', 'F')->count();
+
+		return view('stats', [
+			'title' => 'Stats'
+		]);
 	}
 }

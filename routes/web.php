@@ -38,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
 				->name('edit_record');
 	});
 
+	Route::get('stats', 'RecordController@getStats')
+			->name('stats');
+
 	Route::middleware(['admin'])->group(function(){
 		Route::get('users-dashboard', 'AdminController@userDashboard')
 					->name('users_dashboard');//DONE

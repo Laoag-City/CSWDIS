@@ -42,6 +42,11 @@
             Client List
         </a>
 
+        <a class="item" href="{{ route('stats') }}">
+            <i class="chart bar icon"></i>
+            Stats
+        </a>
+
         @if(Auth::user()->is_admin)
             <a class="item" href="{{ route('users_dashboard') }}">
                 <i class="users icon"></i>
