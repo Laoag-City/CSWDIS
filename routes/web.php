@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
 	});
 
 	Route::get('stats', 'RecordController@getStats')
-			->name('stats');
+			->name('stats');//DONE
 
 	Route::middleware(['admin'])->group(function(){
 		Route::get('users-dashboard', 'AdminController@userDashboard')

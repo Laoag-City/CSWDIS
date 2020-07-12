@@ -128,14 +128,24 @@ class RecordController extends Controller
 
 	public function getStats()
 	{
-		$clients = Client::all();
 		$records = Record::with(['service'])->get();
 
 		$total_males = Client::where('sex', 'M')->count();
 		$total_females = Client::where('sex', 'F')->count();
+		$total_all = $total_males + $total_females;
+		$records_by_service = $records->groupBy('service.service');
+		$total_records_this_month = Record::whereMonth('created_at', date('m', strtotime('now')))
+											->whereYear('created_at', date('Y', strtotime('now')))
+											->get()
+											->count();
 
 		return view('stats', [
-			'title' => 'Stats'
+			'title' => 'Stats',
+			'males' => $total_males,
+			'females' => $total_females,
+			'all' => $total_all,
+			'records_by_service' => $records_by_service,
+			'total_records_this_month' => $total_records_this_month
 		]);
 	}
 }
