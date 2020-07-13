@@ -16,15 +16,17 @@ class ClientController extends Controller
 {
 	public function addNewRecord()
 	{
-		if(Auth::user()->is_admin)
+		if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 		{
 			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = User::where([
-						['is_admin', '=', true],
-						['user_id', '!=', Auth::user()->user_id]
-					])->get();
+			$admins = User::where('user_id', '!=', Auth::user()->user_id)
+						->orWhere(function($query) {
+							$query->where('is_admin', '=', 'true')
+									->where('is_confidential_accessor', '=', true);
+						})
+						->get();
 		}
 
 		else
