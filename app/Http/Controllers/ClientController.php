@@ -153,7 +153,10 @@ class ClientController extends Controller
 											->pluck('service_id')
 											->toArray();
 
-			$records = Record::whereIn('service_id', $non_confidential_services)->with(['service'])->get();
+			$records = Record::where('client_id', $client->client_id)
+							->whereIn('service_id', $non_confidential_services)
+							->with(['service'])
+							->get();
 		}
 
 		return view('client_info', [

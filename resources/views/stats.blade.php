@@ -12,12 +12,14 @@
 
 		<ul style="text-align: left;">
 			@foreach($records_by_service as $key => $record)
-				@if($record->first()->service->is_confidential)
-					@if(Auth::user()->is_admin)
+				@if($record->first()->service != null)
+					@if($record->first()->service->is_confidential && Auth::user()->is_admin)
+						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
+					@else
 						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
 					@endif
 				@else
-					<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
+					<li style="margin-bottom: 10px;"><h3><i>Removed/deleted Services</i>: {{ $record->count() }}</h3></li>
 				@endif
 			@endforeach
 		</ul>

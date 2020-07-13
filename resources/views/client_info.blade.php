@@ -9,7 +9,7 @@
 	</div>
 
 	<div class="content">
-		<p>Are you sure you want to delete @{{ delete_name }}?</p>
+		<p>Are you sure you want to delete record @{{ delete_name }}?</p>
 	</div>
 
 	<form method="POST" :action="form_action" class="actions">
@@ -115,7 +115,7 @@
 					{?>
 						<div class="title">
 							<i class="dropdown icon"></i>
-							{{ $record->service->service }} (Date requested: {{ $record->toNiceDate('date_requested') }}, Action Taken Date: {{ $record->toNiceDate('action_taken_date') }})
+							{{ $record->service ? $record->service->service : '' }} (Date requested: {{ $record->toNiceDate('date_requested') }}, Action Taken Date: {{ $record->toNiceDate('action_taken_date') }})
 						</div>
 
 						<div class="content">
@@ -125,7 +125,7 @@
 									@if(Auth::user()->is_admin)
 										<a href="#"
 											class="ui red button"
-											@click="openModal('{{ route('remove_record', ['record' => $record->record_id]) }}', '{{ $record->service->service }} (Date requested: {{ $record->toNiceDate('date_requested') }}, Action Taken Date: {{ $record->toNiceDate('action_taken_date') }})', 'Record')">
+											@click="openModal('{{ route('remove_record', ['record' => $record->record_id]) }}', '{{ $record->service ? $record->service->service : '' }} (Date requested: {{ $record->toNiceDate('date_requested') }}, Action Taken Date: {{ $record->toNiceDate('action_taken_date') }})', 'Record')">
 											Remove
 										</a>
 									@endif

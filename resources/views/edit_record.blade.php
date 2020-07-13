@@ -3,20 +3,29 @@
 @section('main_content')
 
 @php
-	if(Auth::user()->is_admin)
+	if($record->service != null)
 	{
-		$selected_service = App\Service::find(old('service') ? old('service') : $record->service->service_id);
+		if(Auth::user()->is_admin)
+		{
+			$selected_service = App\Service::find(old('service') ? old('service') : $record->service->service_id);
 
-		if($selected_service && $selected_service->is_confidential)
-			$selected_service_confidential = 'true';
+			if($selected_service && $selected_service->is_confidential)
+				$selected_service_confidential = 'true';
+			else
+				$selected_service_confidential = 'false';
+		}
+
 		else
 			$selected_service_confidential = 'false';
+
+		$service_to_use = old('service') ? old('service') : $record->service->service_id;
 	}
 
 	else
+	{
 		$selected_service_confidential = 'false';
-
-	$service_to_use = old('service') ? old('service') : $record->service->service_id;
+		$service_to_use = '';
+	}
 @endphp
 
 <form id="edit_record_form" action="{{ url()->current() }}" method="POST" class="ui text_center sixteen wide column form {{ $errors->any() ? 'error' : 'success' }}">

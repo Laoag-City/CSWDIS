@@ -20,12 +20,18 @@ class ConfidentialViewersFilter
     {
         if($request->route('record'))
         {
-            if($request->route('record')->service->is_confidential)
+            if($request->route('record')->service != null)
             {
-                if($request->route('record')->confidential_viewers->pluck('user_id')->contains(Auth::user()->user_id))
-                    return $next($request);
+                if($request->route('record')->service->is_confidential)
+                {
+                    if($request->route('record')->confidential_viewers->pluck('user_id')->contains(Auth::user()->user_id))
+                        return $next($request);
+                    else
+                        return back();
+                }
+
                 else
-                    return back();
+                    return $next($request);
             }
 
             else
