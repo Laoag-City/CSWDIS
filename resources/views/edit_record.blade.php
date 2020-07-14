@@ -5,7 +5,7 @@
 @php
 	if($record->service != null)
 	{
-		if(Auth::user()->is_admin)
+		if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 		{
 			$selected_service = App\Service::find(old('service') ? old('service') : $record->service->service_id);
 
@@ -27,6 +27,10 @@
 		$service_to_use = '';
 	}
 @endphp
+
+<div class="sixteen wide column">
+	<a href="{{ route('client', ['client' => $record->client]) }}" class="ui blue button" style="float: right;">Back</a>
+</div>
 
 <form id="edit_record_form" action="{{ url()->current() }}" method="POST" class="ui text_center sixteen wide column form {{ $errors->any() ? 'error' : 'success' }}">
 	@csrf

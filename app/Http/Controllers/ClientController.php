@@ -21,12 +21,12 @@ class ClientController extends Controller
 			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = User::where('user_id', '!=', Auth::user()->user_id)
-						->orWhere(function($query) {
-							$query->where('is_admin', '=', 'true')
-									->where('is_confidential_accessor', '=', true);
-						})
-						->get();
+
+			$admins = User::where([
+							['user_id', '!=', Auth::user()->user_id],
+							['is_admin', '=', false],
+							['is_confidential_accessor', '=', true]
+						])->get();
 		}
 
 		else
@@ -145,7 +145,7 @@ class ClientController extends Controller
 
 	public function clientInfo(Client $client)
 	{
-		if(Auth::user()->is_admin)
+		if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 			$records = Record::where('client_id', $client->client_id)->with(['confidential_viewers', 'service'])->get();
 
 		else

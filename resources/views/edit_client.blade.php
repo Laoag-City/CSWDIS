@@ -3,7 +3,7 @@
 @section('main_content')
 
 <div class="sixteen wide column">
-	<a href="{{ url()->previous() }}" class="ui blue button" style="float: right;">Back</a>
+	<a href="{{ route('client', ['client' => $client->client_id]) }}" class="ui blue button" style="float: right;">Back</a>
 </div>
 
 <form action="{{ url()->current() }}" method="POST" class="ui text_center sixteen wide column form {{ $errors->any() ? 'error' : 'success' }}">

@@ -16,15 +16,17 @@ class RecordController extends Controller
 {
     public function editRecord(Record $record)
     {
-    	if(Auth::user()->is_admin)
+    	if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 		{
 			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
+			
 			$admins = User::where([
-						['is_admin', '=', true],
-						['user_id', '!=', Auth::user()->user_id]
-					])->get();
+							['user_id', '!=', Auth::user()->user_id],
+							['is_admin', '=', false],
+							['is_confidential_accessor', '=', true]
+						])->get();
 
 			$confidential_viewers = ConfidentialViewer::where([
 				['record_id', '=', $record->record_id],

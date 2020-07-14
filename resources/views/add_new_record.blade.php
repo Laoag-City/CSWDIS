@@ -3,7 +3,7 @@
 @section('main_content')
 
 @php
-	if(Auth::user()->is_admin)
+	if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 	{
 		if(old('service'))
 		{
