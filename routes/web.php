@@ -54,6 +54,14 @@ Route::middleware(['auth'])->group(function () {
 		Route::delete('users/{user}', 'AdminController@removeUser')
 					->name('remove_user');//DONE
 
+		Route::delete('clients/{client}', 'ClientController@removeClient')
+					->name('remove_client');//DONE
+
+		Route::delete('records/{record}', 'RecordController@removeRecord')
+					->name('remove_record');//DONE
+	});
+
+	Route::middleware(['admin_confidential'])->group(function(){
 		Route::get('services-dashboard', 'AdminController@serviceDashboard')
 					->name('services_dashboard');//DONE
 
@@ -71,12 +79,6 @@ Route::middleware(['auth'])->group(function () {
 
 		Route::delete('categories/{category}', 'AdminController@removeCategory')
 					->name('remove_category');//DONE
-
-		Route::delete('clients/{client}', 'ClientController@removeClient')
-					->name('remove_client');//DONE
-
-		Route::delete('records/{record}', 'RecordController@removeRecord')
-					->name('remove_record');//DONE
 	});
 
 	Route::post('logout', 'AuthenticationController@logout')->name('logout');//DONE

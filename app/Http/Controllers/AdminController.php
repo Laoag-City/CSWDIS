@@ -25,7 +25,8 @@ class AdminController extends Controller
             'name' => 'bail|required|string|name|max:100',
             'username' => 'bail|required|string|alpha_dash|max:30|unique:users,username',
             'password' => 'bail|required|string|min:5|confirmed',
-            'admin_level' => 'bail|required|boolean'
+            'admin_level' => 'bail|required|boolean',
+            'confidential_accessor' => 'bail|sometimes|boolean'
         ])->validate();
 
         $user = new User;
@@ -33,6 +34,8 @@ class AdminController extends Controller
         $user->username = $this->request->username;
         $user->password = bcrypt($this->request->password);
         $user->is_admin = $this->request->admin_level;
+        if(!$this->request->admin_level)
+            $user->is_confidential_accessor = $this->request->confidential_accessor;
         $user->save();
 
         return back()->with('success', "Added a new user.");
@@ -54,17 +57,25 @@ class AdminController extends Controller
                 'name' => 'bail|required|string|name|max:100',
                 'username' => 'bail|required|string|alpha_dash|max:30|unique:users,username,' . $user->user_id . ',user_id',
                 'password' => 'bail|nullable|string|min:5|confirmed',
-                'admin_level' => 'bail|required|boolean'
+                'admin_level' => 'bail|required|boolean',
+                'confidential_accessor' => 'bail|sometimes|boolean'
             ])->validate();
 
             $user->name = $this->request->name;
             $user->username = $this->request->username;
             $user->password = $this->request->password ? bcrypt($this->request->password) : $user->password;
 
-            if($user->is_admin && !$this->request->admin_level)
+            if($user->is_admin && !$this->request->admin_level && !$this->request->confidential_accessor)
+                ConfidentialViewer::where('user_id', '=', $user->user_id)->delete();
+            elseif(!$user->is_admin && $user->is_confidential_accessor && !$this->request->confidential_accessor)
                 ConfidentialViewer::where('user_id', '=', $user->user_id)->delete();
 
             $user->is_admin = $this->request->admin_level;
+
+            $user->is_confidential_accessor = null;
+            if(!$this->request->admin_level)
+                $user->is_confidential_accessor = $this->request->confidential_accessor;
+            
             $user->save();
 
             return back()->with('success', "User info updated.");

@@ -22,7 +22,7 @@ class ClientController extends Controller
 				return $item->category->category;
 			});
 
-			$admins = User::where([
+			$confidential_accessors = User::where([
 							['user_id', '!=', Auth::user()->user_id],
 							['is_admin', '=', false],
 							['is_confidential_accessor', '=', true]
@@ -34,7 +34,7 @@ class ClientController extends Controller
 			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = collect();
+			$confidential_accessors = collect();
 		}
 
 		if($this->request->isMethod('get'))
@@ -42,7 +42,7 @@ class ClientController extends Controller
 			return view('add_new_record', [
 				'title' => 'Add New Record',
 				'services' => $services,
-				'admins' => $admins,
+				'confidential_accessors' => $confidential_accessors,
 			]);
 		}
 

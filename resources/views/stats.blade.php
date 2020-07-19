@@ -15,8 +15,10 @@
 				@if($record->first()->service != null)
 					@if($record->first()->service->is_confidential && (Auth::user()->is_admin || Auth::user()->is_confidential_accessor))
 						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
-					@else
+					@elseif(!$record->first()->service->is_confidential)
 						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
+					@else
+						@continue
 					@endif
 				@else
 					<li style="margin-bottom: 10px;"><h3><i>Removed/deleted Services</i>: {{ $record->count() }}</h3></li>

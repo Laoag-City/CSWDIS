@@ -22,13 +22,13 @@ class RecordController extends Controller
 				return $item->category->category;
 			});
 			
-			$admins = User::where([
+			$confidential_accessors = User::where([
 							['user_id', '!=', Auth::user()->user_id],
 							['is_admin', '=', false],
 							['is_confidential_accessor', '=', true]
 						])->get();
 
-			$confidential_viewers = ConfidentialViewer::where([
+			$allowed_confidential_accessors = ConfidentialViewer::where([
 				['record_id', '=', $record->record_id],
 				['user_id', '!=', Auth::user()->user_id]
 			])->get()->pluck('user_id');
@@ -39,9 +39,9 @@ class RecordController extends Controller
 			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = collect();
+			$confidential_accessors = collect();
 
-			$confidential_viewers = [];
+			$allowed_confidential_accessors = [];
 		}
 
     	if($this->request->isMethod('get'))
@@ -49,9 +49,9 @@ class RecordController extends Controller
     		return view('edit_record', [
 				'title' => 'Edit Record Info',
 				'record' => $record,
-				'confidential_viewers' => $confidential_viewers,
+				'allowed_confidential_accessors' => $allowed_confidential_accessors,
 				'services' => $services,
-				'admins' => $admins
+				'confidential_accessors' => $confidential_accessors
 			]);
     	}
 

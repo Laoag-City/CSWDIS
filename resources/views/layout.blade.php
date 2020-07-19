@@ -26,8 +26,17 @@
 </head>
 <body>
     @auth
+        @php
+            if(Auth::user()->is_admin)
+                $user_level = '(Admin)';
+            elseif(Auth::user()->is_confidential_accessor)
+                $user_level = '(Confidential Records User)';
+            else
+                $user_level = '(Regular User)';
+        @endphp
+
     <div class="ui sidebar inverted vertical menu">
-        <a class="item" href="#" title="{{ Auth::user()->username }} {{ Auth::user()->is_admin ? '(Admin)' : '' }}">
+        <a class="item" href="#" title="{{ Auth::user()->username }} {{ $user_level }}">
             <i class="user icon"></i>
             Logged in as...
         </a>
@@ -52,7 +61,9 @@
                 <i class="users icon"></i>
                 User Dashboard
             </a>
+        @endif
 
+        @if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
             <a class="item" href="{{ route('services_dashboard') }}">
                 <i class="hands helping icon"></i>
                 Service Dashboard
