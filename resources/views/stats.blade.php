@@ -2,6 +2,10 @@
 
 @section('main_content')
 
+<div class="sixteen wide column">
+	<a href="{{ route('export') }}" class="ui blue button" style="float: right;">Download all records as Excel file</a>
+</div>
+
 <div class="twelve wide column">
 	<div class="ui center aligned segment">
 		<h3>Total males: {{ $males }}</h3>

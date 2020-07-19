@@ -8,6 +8,7 @@ use App\User;
 use App\Service;
 use App\Category;
 use App\ConfidentialViewer;
+use App\Exports\RecordsExport;
 
 class AdminController extends Controller
 {
@@ -225,5 +226,10 @@ class AdminController extends Controller
     {
         $category->delete();
         return back();
+    }
+
+    public function excelExport()
+    {
+        return (new RecordsExport)->download('records.xlsx');
     }
 }
