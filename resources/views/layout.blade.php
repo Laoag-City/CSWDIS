@@ -57,6 +57,11 @@
         </a>
 
         @if(Auth::user()->is_admin)
+            <a class="item" href="{{ route('logs') }}">
+                <i class="table icon"></i>
+                Logs
+            </a>
+
             <a class="item" href="{{ route('users_dashboard') }}">
                 <i class="users icon"></i>
                 User Dashboard

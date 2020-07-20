@@ -61,7 +61,10 @@ Route::middleware(['auth'])->group(function () {
 					->name('remove_record');//DONE
 
 		Route::get('excel-export', 'AdminController@excelExport')
-					->name('export');
+					->name('export');//DONE
+
+		Route::get('logs', 'AdminController@getHistoryLogs')
+					->name('logs');
 	});
 
 	Route::middleware(['admin_confidential'])->group(function(){

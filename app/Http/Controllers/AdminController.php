@@ -9,6 +9,7 @@ use App\Service;
 use App\Category;
 use App\ConfidentialViewer;
 use App\Exports\RecordsExport;
+use App\ClientRecordHistory;
 
 class AdminController extends Controller
 {
@@ -230,6 +231,14 @@ class AdminController extends Controller
 
     public function excelExport()
     {
-        return (new RecordsExport)->download('records.xlsx');
+        return (new RecordsExport)->download("CSWDIS Records " . date('F d, Y', strtotime('now')) . ".xlsx");
+    }
+
+    public function getHistoryLogs()
+    {
+        return view('histories', [
+            'title' => 'History Logs',
+            'logs' => ClientRecordHistory::with(['client', 'record.service', 'user'])->paginate(200)
+        ]);
     }
 }
