@@ -3,7 +3,7 @@
 @section('main_content')
 
 @php
-	if(Auth::user()->is_admin)
+	if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 	{
 		if(old('service'))
 		{
@@ -95,26 +95,26 @@
 			<table class="ui selectable striped celled center aligned table">
 				<thead>
 					<tr>
-						<th>Admins</th>
+						<th>Confidential Accessors</th>
 						<th class="collapsing">Allow Access</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					@foreach($admins as $admin)
+					@foreach($confidential_accessors as $confidential_accessor)
 						@php
-							if(isset(old("users")[$loop->iteration]) && old("users")[$loop->iteration] == $admin->user_id)
+							if(isset(old("users")[$loop->iteration]) && old("users")[$loop->iteration] == $confidential_accessor->user_id)
 								$checked = 'checked';
 							else
 								$checked = '';
 						@endphp
 						<tr>
-							<td>{{ $admin->name }}</td>
+							<td>{{ $confidential_accessor->name }}</td>
 							<td class="collapsing">
 								<input 
 									type="checkbox" 
 									name="users[{{ $loop->iteration }}]" 
-									value="{{ $admin->user_id }}" 
+									value="{{ $confidential_accessor->user_id }}" 
 									{{ $checked }}
 								>
 							</td>

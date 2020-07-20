@@ -92,15 +92,15 @@
 	<div class="sixteen wide column">
 		<div class="ui styled fluid accordion">
 			<?php
-				$to_view_record = false;
-
 				foreach($records as $record)
 				{
+					$to_view_record = false;
+
 					if($record->confidential_viewers->isNotEmpty())
 					{
 						foreach($record->confidential_viewers as $confidential_viewer)
 						{
-							if($confidential_viewer->user_id == Auth::user()->user_id)
+							if($confidential_viewer->user_id == Auth::user()->user_id || Auth::user()->is_admin)
 							{
 								$to_view_record = true;
 								break;
@@ -131,6 +131,14 @@
 									@endif
 								</div>
 
+								@if($record->confidential_viewers->isNotEmpty())
+									<p>
+										<b>Personnel In Charge:</b> 
+										@foreach($record->confidential_viewers as $viewer)
+											<span>{{ $loop->last ? $viewer->user->username : "{$viewer->user->username}, " }}</span>
+										@endforeach
+									</p>
+								@endif
 
 								<p>
 									<b>Problem Presented:</b> {{ $record->problem_presented }}

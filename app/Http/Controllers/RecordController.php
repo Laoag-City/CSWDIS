@@ -16,17 +16,19 @@ class RecordController extends Controller
 {
     public function editRecord(Record $record)
     {
-    	if(Auth::user()->is_admin)
+    	if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 		{
 			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = User::where([
-						['is_admin', '=', true],
-						['user_id', '!=', Auth::user()->user_id]
-					])->get();
+			
+			$confidential_accessors = User::where([
+							['user_id', '!=', Auth::user()->user_id],
+							['is_admin', '=', false],
+							['is_confidential_accessor', '=', true]
+						])->get();
 
-			$confidential_viewers = ConfidentialViewer::where([
+			$allowed_confidential_accessors = ConfidentialViewer::where([
 				['record_id', '=', $record->record_id],
 				['user_id', '!=', Auth::user()->user_id]
 			])->get()->pluck('user_id');
@@ -37,9 +39,9 @@ class RecordController extends Controller
 			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = collect();
+			$confidential_accessors = collect();
 
-			$confidential_viewers = [];
+			$allowed_confidential_accessors = [];
 		}
 
     	if($this->request->isMethod('get'))
@@ -47,9 +49,9 @@ class RecordController extends Controller
     		return view('edit_record', [
 				'title' => 'Edit Record Info',
 				'record' => $record,
-				'confidential_viewers' => $confidential_viewers,
+				'allowed_confidential_accessors' => $allowed_confidential_accessors,
 				'services' => $services,
-				'admins' => $admins
+				'confidential_accessors' => $confidential_accessors
 			]);
     	}
 
@@ -58,7 +60,7 @@ class RecordController extends Controller
     		$validator = Validator::make($this->request->all(), [
 				'service' => 'bail|required|in:' . implode(',', $services->flatten()->pluck('service_id')->toArray()),
 				'users' => 'bail|sometimes|array',
-				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('user_id')->toArray()),
+				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $confidential_accessors->pluck('user_id')->toArray()),
 
 				'date_requested' => 'bail|required|date|before_or_equal:now',
 				'problem_presented' => 'bail|required|string|max:255',

@@ -2,6 +2,10 @@
 
 @section('main_content')
 
+<div class="sixteen wide column">
+	<a href="{{ route('export') }}" class="ui blue button" style="float: right;">Download all records as Excel file</a>
+</div>
+
 <div class="twelve wide column">
 	<div class="ui center aligned segment">
 		<h3>Total males: {{ $males }}</h3>
@@ -13,10 +17,12 @@
 		<ul style="text-align: left;">
 			@foreach($records_by_service as $key => $record)
 				@if($record->first()->service != null)
-					@if($record->first()->service->is_confidential && Auth::user()->is_admin)
+					@if($record->first()->service->is_confidential && (Auth::user()->is_admin || Auth::user()->is_confidential_accessor))
+						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
+					@elseif(!$record->first()->service->is_confidential)
 						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
 					@else
-						<li style="margin-bottom: 10px;"><h3>{{ $key }}: {{ $record->count() }}</h3></li>
+						@continue
 					@endif
 				@else
 					<li style="margin-bottom: 10px;"><h3><i>Removed/deleted Services</i>: {{ $record->count() }}</h3></li>

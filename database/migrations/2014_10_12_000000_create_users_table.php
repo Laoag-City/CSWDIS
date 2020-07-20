@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name', 100);
             $table->string('username', 30)->unique();
             $table->string('password');
+            $table->boolean('is_confidential_accessor')->nullable();
             $table->boolean('is_admin');
             $table->timestamps();
         });

@@ -16,15 +16,17 @@ class ClientController extends Controller
 {
 	public function addNewRecord()
 	{
-		if(Auth::user()->is_admin)
+		if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 		{
 			$services = Service::with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = User::where([
-						['is_admin', '=', true],
-						['user_id', '!=', Auth::user()->user_id]
-					])->get();
+
+			$confidential_accessors = User::where([
+							['user_id', '!=', Auth::user()->user_id],
+							['is_admin', '=', false],
+							['is_confidential_accessor', '=', true]
+						])->get();
 		}
 
 		else
@@ -32,7 +34,7 @@ class ClientController extends Controller
 			$services = Service::where('is_confidential', '=', false)->with(['category'])->get()->groupBy(function($item, $key){
 				return $item->category->category;
 			});
-			$admins = collect();
+			$confidential_accessors = collect();
 		}
 
 		if($this->request->isMethod('get'))
@@ -40,7 +42,7 @@ class ClientController extends Controller
 			return view('add_new_record', [
 				'title' => 'Add New Record',
 				'services' => $services,
-				'admins' => $admins,
+				'confidential_accessors' => $confidential_accessors,
 			]);
 		}
 
@@ -56,7 +58,7 @@ class ClientController extends Controller
 
 				'service' => 'bail|required|in:' . implode(',', $services->flatten()->pluck('service_id')->toArray()),
 				'users' => 'bail|sometimes|array',
-				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $admins->pluck('user_id')->toArray()),
+				'users.*' => 'bail|sometimes|distinct|in:' . implode(',', $confidential_accessors->pluck('user_id')->toArray()),
 
 				'date_requested' => 'bail|required|date|before_or_equal:now',
 				'problem_presented' => 'bail|required|string|max:255',
@@ -143,7 +145,7 @@ class ClientController extends Controller
 
 	public function clientInfo(Client $client)
 	{
-		if(Auth::user()->is_admin)
+		if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 			$records = Record::where('client_id', $client->client_id)->with(['confidential_viewers', 'service'])->get();
 
 		else

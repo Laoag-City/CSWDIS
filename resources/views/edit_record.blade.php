@@ -5,7 +5,7 @@
 @php
 	if($record->service != null)
 	{
-		if(Auth::user()->is_admin)
+		if(Auth::user()->is_admin || Auth::user()->is_confidential_accessor)
 		{
 			$selected_service = App\Service::find(old('service') ? old('service') : $record->service->service_id);
 
@@ -27,6 +27,10 @@
 		$service_to_use = '';
 	}
 @endphp
+
+<div class="sixteen wide column">
+	<a href="{{ route('client', ['client' => $record->client]) }}" class="ui blue button" style="float: right;">Back</a>
+</div>
 
 <form id="edit_record_form" action="{{ url()->current() }}" method="POST" class="ui text_center sixteen wide column form {{ $errors->any() ? 'error' : 'success' }}">
 	@csrf
@@ -65,17 +69,17 @@
 			<table class="ui selectable striped celled center aligned table">
 				<thead>
 					<tr>
-						<th>Admins</th>
+						<th>Confidential Accessors</th>
 						<th class="collapsing">Allow Access</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					@foreach($admins as $admin)
+					@foreach($confidential_accessors as $confidential_accessor)
 						@php
 							if(old('users'))
 							{
-								if(isset(old("users")[$loop->iteration]) && old("users")[$loop->iteration] == $admin->user_id)
+								if(isset(old("users")[$loop->iteration]) && old("users")[$loop->iteration] == $confidential_accessor->user_id)
 									$checked = 'checked';
 								else
 									$checked = '';
@@ -83,19 +87,19 @@
 
 							else
 							{
-								if($confidential_viewers->contains($admin->user_id))
+								if($allowed_confidential_accessors->contains($confidential_accessor->user_id))
 									$checked = 'checked';
 								else
 									$checked = '';
 							}
 						@endphp
 						<tr>
-							<td>{{ $admin->name }}</td>
+							<td>{{ $confidential_accessor->name }}</td>
 							<td class="collapsing">
 								<input 
 									type="checkbox" 
 									name="users[{{ $loop->iteration }}]" 
-									value="{{ $admin->user_id }}" 
+									value="{{ $confidential_accessor->user_id }}" 
 									{{ $checked }}
 								>
 							</td>
