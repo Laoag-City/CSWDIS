@@ -46,7 +46,12 @@
 	<div class="fields">
 		<div class="ten wide field {{ !$errors->has('address') ?: 'error' }}">
 			<label>Address</label>
-			<input type="text" name="address" value="{{ old('address') }}">
+			<select name="address">
+				<option value="" {{ old('address') == '' ? 'selected' : '' }}></option>
+				@foreach($barangays as $brgy)
+					<option value="{{ $brgy->barangay_id }}" {{ old('address') == $brgy->barangay_id ? 'selected' : '' }}>{{ $brgy->name }}</option>
+				@endforeach
+			</select>
 		</div>
 
 		<div class="two wide field {{ !$errors->has('sex') ?: 'error' }}">
@@ -205,13 +210,13 @@
 
 		fields: {
 			title: 'name',
-			description: 'address'
+			description: 'barangay'
 		},
 
 		onSelect: function(result, response){
 			$('input[name=client_id]').val(result.client_id);
 			$('input[name=phone_no]').val(result.phone_no);
-			$('input[name=address]').val(result.address);
+			$('select[name=address]').val(result.barangay_id);
 			$('select[name=sex]').val(result.sex);
 			$('input[name=date_of_birth]').val(result.date_of_birth);
 		}

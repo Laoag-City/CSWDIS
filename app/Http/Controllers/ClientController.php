@@ -129,7 +129,11 @@ class ClientController extends Controller
 
 	public function searchClients($search = null)
 	{
-		return Client::where('name', 'like', $search ? "%$search%" : "%{$this->request->name}%")->get();
+		return Client::select(['clients.client_id', 'clients.barangay_id', 'clients.name', 'clients.phone_no', 'clients.sex', 'clients.date_of_birth'])
+					->addSelect('barangays.name as barangay')
+					->where('clients.name', 'like', $search ? "%$search%" : "%{$this->request->name}%")
+					->join('barangays', 'clients.barangay_id', '=', 'barangays.barangay_id')
+					->get();
 	}
 
 	public function clientList()

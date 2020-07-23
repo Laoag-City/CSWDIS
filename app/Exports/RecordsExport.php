@@ -20,17 +20,19 @@ class RecordsExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoS
     {
         return Record::query()
         		->select([
-        			'clients.name', 'clients.phone_no', 'clients.address', 'clients.sex', 'clients.date_of_birth',
+        			'clients.name', 'clients.phone_no', 'clients.sex', 'clients.date_of_birth',
         			'records.date_requested', 'records.problem_presented', 'records.initial_assessment', 'records.recommendation', 'records.action_taken', 
         			'records.action_taken_date', 'services.service', 'services.is_confidential'
-        	])->join('clients', 'records.client_id', '=', 'clients.client_id')
-        		->leftJoin('services', 'records.service_id', '=', 'services.service_id');
+        	])->addSelect('barangays.name as barangay')
+                ->join('clients', 'records.client_id', '=', 'clients.client_id')
+        		->leftJoin('services', 'records.service_id', '=', 'services.service_id')
+                ->leftJoin('barangays', 'clients.barangay_id', '=', 'barangays.barangay_id');
     }
 
     public function map($record): array
     {
         return [
-            $record->name, $record->phone_no, $record->address, $record->sex, date('F d, Y', strtotime($record->date_of_birth)), date('F d, Y', strtotime($record->date_requested)), 
+            $record->name, $record->phone_no, $record->barangay . ', Laoag City', $record->sex, date('F d, Y', strtotime($record->date_of_birth)), date('F d, Y', strtotime($record->date_requested)), 
             $record->problem_presented, $record->initial_assessment, $record->recommendation, $record->action_taken, date('F d, Y', strtotime($record->action_taken_date)), 
             $record->service,  $this->getBooleanValue($record->is_confidential)
         ];
