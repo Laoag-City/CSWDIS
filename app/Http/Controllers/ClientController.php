@@ -11,6 +11,7 @@ use App\Record;
 use App\ConfidentialViewer;
 use App\User;
 use App\ClientRecordHistory;
+use App\Barangay;
 
 class ClientController extends Controller
 {
@@ -43,6 +44,7 @@ class ClientController extends Controller
 				'title' => 'Add New Record',
 				'services' => $services,
 				'confidential_accessors' => $confidential_accessors,
+				'barangays' => Barangay::all()
 			]);
 		}
 
@@ -52,7 +54,7 @@ class ClientController extends Controller
 				'client_id' => 'bail|nullable|exists:clients,client_id',
 				'name' => 'bail|required|string|name|max:100',
 				'phone_no' => 'bail|required|string|max:40',
-				'address' => 'bail|required|string:max:255',
+				'address' => 'bail|required|exists:barangays,barangay_id',
 				'sex' => 'bail|required|in:M,F',
 				'date_of_birth' => 'bail|required|date|before:now',
 
@@ -77,9 +79,9 @@ class ClientController extends Controller
 			else
 				$client = new Client;
 
+			$client->barangay_id = $this->request->address;
 			$client->name = $this->request->name;
 			$client->phone_no = $this->request->phone_no;
-			$client->address = $this->request->address;
 			$client->sex = $this->request->sex;
 			$client->date_of_birth = $this->request->date_of_birth;
 			$client->save();
@@ -127,7 +129,11 @@ class ClientController extends Controller
 
 	public function searchClients($search = null)
 	{
-		return Client::where('name', 'like', $search ? "%$search%" : "%{$this->request->name}%")->get();
+		return Client::select(['clients.client_id', 'clients.barangay_id', 'clients.name', 'clients.phone_no', 'clients.sex', 'clients.date_of_birth'])
+					->addSelect('barangays.name as barangay')
+					->where('clients.name', 'like', $search ? "%$search%" : "%{$this->request->name}%")
+					->join('barangays', 'clients.barangay_id', '=', 'barangays.barangay_id')
+					->get();
 	}
 
 	public function clientList()
@@ -174,7 +180,8 @@ class ClientController extends Controller
 		{
 			return view('edit_client', [
 				'title' => 'Edit Client Info',
-				'client' => $client
+				'client' => $client,
+				'barangays' => Barangay::all()
 			]);
 		}
 
@@ -183,16 +190,16 @@ class ClientController extends Controller
 			$validator = Validator::make($this->request->all(), [
 				'name' => 'bail|required|string|name|max:100',
 				'phone_no' => 'bail|required|string|max:40',
-				'address' => 'bail|required|string:max:255',
+				'address' => 'bail|required|exists:barangays,barangay_id',
 				'sex' => 'bail|required|in:M,F',
 				'date_of_birth' => 'bail|required|date|before:now',
 			]);
 
 			$validator->validate();
 
+			$client->barangay_id = $this->request->address;
 			$client->name = $this->request->name;
 			$client->phone_no = $this->request->phone_no;
-			$client->address = $this->request->address;
 			$client->sex = $this->request->sex;
 			$client->date_of_birth = $this->request->date_of_birth;
 			$client->save();

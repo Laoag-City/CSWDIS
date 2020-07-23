@@ -61,7 +61,7 @@
 	<div class="ten wide column">
 		<h3>
 			Address:
-			<i>{{ $client->address }}</i>
+			<i>{{ $client->barangay->name }}, Laoag City</i>
 		</h3>
 	</div>
 

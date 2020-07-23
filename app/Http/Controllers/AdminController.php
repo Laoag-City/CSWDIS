@@ -69,7 +69,7 @@ class AdminController extends Controller
 
             if($user->is_admin && !$this->request->admin_level && !$this->request->confidential_accessor)
                 ConfidentialViewer::where('user_id', '=', $user->user_id)->delete();
-            elseif(!$user->is_admin && $user->is_confidential_accessor && !$this->request->confidential_accessor)
+            elseif(!$user->is_admin && !$this->request->admin_level && $user->is_confidential_accessor && !$this->request->confidential_accessor)
                 ConfidentialViewer::where('user_id', '=', $user->user_id)->delete();
 
             $user->is_admin = $this->request->admin_level;

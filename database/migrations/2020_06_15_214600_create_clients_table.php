@@ -15,12 +15,18 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id('client_id');
+            $table->foreignId('barangay_id')->nullable();
             $table->string('name', 100);
             $table->string('phone_no', 40);
-            $table->string('address');
             $table->string('sex', 1);
             $table->date('date_of_birth');
             $table->timestamps();
+
+            $table->foreign('barangay_id')
+                                    ->references('barangay_id')
+                                    ->on('barangays')
+                                    ->onUpdate('cascade')
+                                    ->onDelete('set null');
         });
     }
 

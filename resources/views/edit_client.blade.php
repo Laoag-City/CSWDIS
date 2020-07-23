@@ -27,9 +27,21 @@
 	</div>
 
 	<div class="fields">
+		@php
+			if(old('address'))
+				$selected_address = old('address');
+			else
+				$selected_address = $client->barangay->barangay_id;
+		@endphp
+
 		<div class="ten wide field {{ !$errors->has('address') ?: 'error' }}">
 			<label>Address</label>
-			<input type="text" name="address" value="{{ old('address') ? old('address') : $client->address }}">
+			<select name="address">
+				<option value="" {{ $selected_address == '' ? 'selected' : '' }}></option>
+				@foreach($barangays as $brgy)
+					<option value="{{ $brgy->barangay_id }}" {{ $selected_address == $brgy->barangay_id ? 'selected' : '' }}>{{ $brgy->name }}</option>
+				@endforeach
+			</select>
 		</div>
 
 		@php

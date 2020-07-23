@@ -63,7 +63,7 @@
 				<tr>
 					<td>{{ $client->name }}</td>
 					<td>{{ $client->phone_no }}</td>
-					<td>{{ $client->address }}</td>
+					<td>{{ $client->barangay->name }}, Laoag City</td>
 					<td>{{ $client->sex }}</td>
 					<td>{{ $client->toNiceBirthday() }}</td>
 					<td>
