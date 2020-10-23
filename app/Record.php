@@ -13,6 +13,11 @@ class Record extends Model
     	return $this->belongsTo('App\Client', 'client_id', 'client_id');
     }
 
+    public function beneficiary()
+    {
+        return $this->belongsTo('App\Beneficiary', 'beneficiary_id', 'beneficiary_id');
+    }
+
     public function service()
     {
     	return $this->belongsTo('App\Service', 'service_id', 'service_id');

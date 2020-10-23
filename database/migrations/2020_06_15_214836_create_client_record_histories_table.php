@@ -16,6 +16,7 @@ class CreateClientRecordHistoriesTable extends Migration
         Schema::create('client_record_histories', function (Blueprint $table) {
             $table->id('client_record_history_id');
             $table->foreignId('client_id')->nullable();
+            $table->foreignId('beneficiary_id')->nullable();
             $table->foreignId('record_id')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->string('action', 50);
@@ -26,6 +27,12 @@ class CreateClientRecordHistoriesTable extends Migration
                                     ->on('clients')
                                     ->onUpdate('cascade')
                                     ->onDelete('cascade');
+
+            $table->foreign('beneficiary_id')
+                                    ->references('beneficiary_id')
+                                    ->on('beneficiaries')
+                                    ->onUpdate('cascade')
+                                    ->onDelete('set null');
 
             $table->foreign('record_id')
                                     ->references('record_id')

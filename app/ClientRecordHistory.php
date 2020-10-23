@@ -13,6 +13,11 @@ class ClientRecordHistory extends Model
     	return $this->belongsTo('App\Client', 'client_id', 'client_id');
     }
 
+    public function beneficiary()
+    {
+        return $this->belongsTo('App\Beneficiary', 'beneficiary_id', 'beneficiary_id');
+    }
+
     public function record()
     {
     	return $this->belongsTo('App\Record', 'record_id', 'record_id');

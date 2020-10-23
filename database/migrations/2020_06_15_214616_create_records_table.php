@@ -17,6 +17,7 @@ class CreateRecordsTable extends Migration
             $table->id('record_id');
             $table->foreignId('client_id');
             $table->foreignId('service_id')->nullable();
+            $table->foreignId('beneficiary_id')->nullable();
             $table->date('date_requested');
             $table->string('problem_presented');
             $table->string('initial_assessment')->nullable();
@@ -30,6 +31,12 @@ class CreateRecordsTable extends Migration
                                     ->on('clients')
                                     ->onUpdate('cascade')
                                     ->onDelete('cascade');
+
+            $table->foreign('beneficiary_id')
+                                    ->references('beneficiary_id')
+                                    ->on('beneficiaries')
+                                    ->onUpdate('cascade')
+                                    ->onDelete('set null');
 
             $table->foreign('service_id')
                                     ->references('service_id')
