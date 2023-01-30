@@ -19,6 +19,6 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "fomantic-ui": "^2.8.5"
+        "fomantic-ui": "^2.9.1"
     }
 }
